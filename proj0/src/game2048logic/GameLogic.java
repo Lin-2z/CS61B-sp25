@@ -24,14 +24,14 @@ public class GameLogic {
         if (value == 0) return 0;
 
         int upTileRow = r - 1;
-        while (r > 0 && board[upTileRow][c] == 0) {
+        while (r > 0 && board[upTileRow][c] == 0 && upTileRow >= minR) {
             board[upTileRow][c] = value;
             board[r][c] = 0;
             upTileRow -= 1;
             r -= 1;
         }
 
-        if (board[upTileRow][c] == value) {
+        if (board[upTileRow][c] == value && upTileRow >= minR) {
             board[upTileRow][c] = value * 2;
             board[r][c] = 0;
             return upTileRow + 1;
