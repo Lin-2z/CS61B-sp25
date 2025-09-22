@@ -19,24 +19,37 @@ public class GameLogic {
      *              if no merge occurs, then return 0.
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
-        // TODO: Fill this in in tasks 2, 3, 4
-        int value = board[r][c];
-        if (value == 0) return 0;
-
-        int upTileRow = r - 1;
-        while (r > 0 && board[upTileRow][c] == 0 && upTileRow >= minR) {
-            board[upTileRow][c] = value;
-            board[r][c] = 0;
-            upTileRow -= 1;
-            r -= 1;
+        int originalValue = board[r][c];
+        if (originalValue == 0) {
+            return 0;
         }
 
-        if (board[upTileRow][c] == value && upTileRow >= minR) {
-            board[upTileRow][c] = value * 2;
-            board[r][c] = 0;
-            return upTileRow + 1;
+        int currentRow = r;
+        int targetRow = r - 1;
+
+        // Find the furthest empty spot or a tile to merge with
+        while (targetRow >= minR) {
+            if (board[targetRow][c] == 0) {
+                currentRow = targetRow;
+            } else if (board[targetRow][c] == originalValue) {
+                // Found a tile to merge with
+                board[targetRow][c] *= 2;
+                board[r][c] = 0;
+                return targetRow + 1;
+            } else {
+                // Blocked by a different tile
+                break;
+            }
+            targetRow -= 1;
         }
-        return 0;
+
+        // Move to the final empty spot if it's different from the original
+        if (currentRow != r) {
+            board[currentRow][c] = originalValue;
+            board[r][c] = 0;
+        }
+
+        return 0; // No merge occurred
     }
 
     /**
@@ -48,6 +61,13 @@ public class GameLogic {
      */
     public static void tiltColumn(int[][] board, int c) {
         // TODO: fill this in in task 5
+        int minR = 0;
+        for (int r = 1; r < board.length; r++) {
+            int mergeRow = moveTileUpAsFarAsPossible(board, r, c, minR);
+            if (mergeRow > 0) {
+                minR = mergeRow;
+            }
+        }
         return;
     }
 
