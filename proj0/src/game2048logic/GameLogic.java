@@ -30,7 +30,12 @@ public class GameLogic {
             upTileRow -= 1;
             r -= 1;
         }
-        
+
+        if (board[upTileRow][c] == value) {
+            board[upTileRow][c] = value * 2;
+            board[r][c] = 0;
+            return upTileRow + 1;
+        }
         return 0;
     }
 
